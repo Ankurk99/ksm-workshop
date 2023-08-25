@@ -1,0 +1,21 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: harden-dvwa-web-write-in-shm-dir
+  namespace: dvwa
+spec:
+  action: Block
+  file:
+    matchDirectories:
+    - dir: /dev/shm/
+      readOnly: true
+      recursive: true
+  message: Alert! write to /dev/shm folder prevented.
+  selector:
+    matchLabels:
+      app: dvwa-web
+      tier: frontend
+  severity: 5
+  tags:
+  - MITRE_execution
+  - MITRE

@@ -1,0 +1,65 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: autopol-system-4070111837
+  namespace: dvwa
+spec:
+  action: Allow
+  file:
+    matchDirectories:
+    - dir: /etc/mysql/conf.d/
+      fromSource:
+      - path: /usr/sbin/mysqld
+      recursive: true
+    - dir: /tmp/
+      fromSource:
+      - path: /usr/sbin/mysqld
+      recursive: true
+    - dir: /usr/lib/x86_64-linux-gnu/
+      fromSource:
+      - path: /usr/sbin/mysqld
+      recursive: true
+    - dir: /var/lib/mysql/
+      fromSource:
+      - path: /usr/sbin/mysqld
+      recursive: true
+    - dir: /lib/x86_64-linux-gnu/
+      recursive: true
+    matchPaths:
+    - fromSource:
+      - path: /usr/sbin/mysqld
+      path: /dev/null
+    - fromSource:
+      - path: /usr/sbin/mysqld
+      path: /etc/gai.conf
+    - fromSource:
+      - path: /bin/date
+      - path: /usr/sbin/mysqld
+      path: /etc/ld.so.cache
+    - fromSource:
+      - path: /usr/sbin/mysqld
+      path: /etc/mysql/my.cnf
+    - fromSource:
+      - path: /usr/sbin/mysqld
+      path: /run/mysqld/mysqld.pid
+    - fromSource:
+      - path: /usr/sbin/mysqld
+      path: /usr/share/mysql/charsets/Index.xml
+    - fromSource:
+      - path: /usr/sbin/mysqld
+      path: /usr/share/mysql/english/errmsg.sys
+    - fromSource:
+      - path: /bin/date
+      - path: /usr/sbin/mysqld
+      path: /usr/share/zoneinfo/UCT
+  process:
+    matchPaths:
+    - fromSource:
+      - path: /bin/bash
+      path: /bin/date
+    - path: /usr/sbin/mysqld
+  selector:
+    matchLabels:
+      app: dvwa-mysql
+      tier: backend
+  severity: 1

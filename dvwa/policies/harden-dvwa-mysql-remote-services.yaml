@@ -1,0 +1,26 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: harden-dvwa-mysql-remote-services
+  namespace: dvwa
+spec:
+  action: Audit
+  file:
+    matchDirectories:
+    - dir: /etc/ssh/
+    matchPaths:
+    - path: /var/log/wtmp
+    - path: /var/run/utmp
+    - path: /var/log/auth.log
+    - path: /etc/passwd
+    - path: /etc/shadow
+  message: Warning! access sensitive files detected
+  selector:
+    matchLabels:
+      app: dvwa-mysql
+      tier: backend
+  severity: 3
+  tags:
+  - MITRE
+  - FIGHT
+  - FGT1021

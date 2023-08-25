@@ -1,0 +1,20 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: harden-dvwa-web-maint-tools-access
+  namespace: dvwa
+spec:
+  action: Audit
+  message: restricted maintenance tool access attempt detected
+  process:
+    matchDirectories:
+    - dir: /sbin/
+      recursive: true
+  selector:
+    matchLabels:
+      app: dvwa-web
+      tier: frontend
+  severity: 1
+  tags:
+  - PCI_DSS
+  - MITRE
